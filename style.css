@@ -1,0 +1,50 @@
+label,
+body {
+  user-select: none;
+}
+input[type="checkbox"] {
+  margin-right: 3px;
+  cursor: pointer;
+}
+label,
+select,
+button {
+  cursor: pointer;
+}
+.title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+.savebtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.autoflag {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#addedCSS {
+  resize: none;
+  max-width: 100%;
+}
+#minlength,
+#maxlength {
+  width: 60px;
+  height: 1rem;
+}
+#deeplpro_apikey,
+#apitest {
+  height: 1rem;
+}
+.ms-choice,
+#target {
+  height: 1rem;
+}
+#addedCSStext {
+  margin-bottom: 0;
+}

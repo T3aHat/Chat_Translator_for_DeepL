@@ -1,0 +1,13 @@
+.par_deepl_icon {
+  display: flex;
+  justify-content: center;
+  margin-left: 6px;
+}
+.deepl_icon {
+  z-index: 9999;
+  cursor: pointer;
+  border-radius: 6px !important;
+}
+#header-author.ytd-comment-renderer {
+  align-items: center !important;
+}
