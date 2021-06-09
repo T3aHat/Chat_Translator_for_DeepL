@@ -1,11 +1,11 @@
 {
   "manifest_version": 2,
-  "name": "YouTube™ Chat Translator for DeepL",
-  "version": "1.0.4",
+  "name": "Chat Translator for DeepL",
+  "version": "1.1.0",
   "permissions": ["storage","identity","identity.email"],
-  "description": "Translate YouTube comments and chat using DeepL Pro API",
+  "description": "Translate YouTube comments by DeepL API",
   "icons": { "128": "icon128.png" },
-  "web_accessible_resources": ["icon24.png"],
+  "web_accessible_resources": ["loading.gif"],
   "options_ui":{
     "page":"options.html",
     "chrome_style":true
@@ -21,11 +21,7 @@
     {"run_at":"document_end",
       "matches":["https://www.youtube.com/live_chat*"],
       "all_frames":true,
-      "js":["chat-translator.js"]},   
-    {"run_at":"document_end",
-        "matches":["https://www.youtube.com/watch*"],
-        "js":["comment-translator.js"],
-        "css":["comment-translator.css"]
-      }
+      "js":["chat-translator.js"]
+    }
   ]
 }

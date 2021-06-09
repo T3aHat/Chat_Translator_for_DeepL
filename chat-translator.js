@@ -1,29 +1,22 @@
-console.log("YouTube™ Chat Translator for DeepL (chat) loaded");
-chrome.runtime.sendMessage({ message: "please_restore" }, function (res) {
-  if (chrome.runtime.lastError) {
-  }
-});
-
+console.log("Chat Translator for DeepL: loaded");
 let observer;
-let chatsClass;
 var deeplpro_apikey;
 var target;
 var translang;
-var autoTranslationFlag;
 var minlength;
 var maxlength;
+let freeflag;
+let rmLoadingFlag = false;
+let translatingflag = false;
+let anywayFlag = false;
+const imgurl = chrome.runtime.getURL("loading.gif");
+
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  if (request.message == "restore_storage") {
-    sendResponse();
-    chatsClass = document.querySelector(
-      "#items.yt-live-chat-item-list-renderer"
-    );
-    change_settings(request);
-    add_observer();
-  } else if (request.message == "saved") {
+  if (request.message == "saved") {
     sendResponse();
     change_settings(request);
-    add_observer();
+  } else if (request.message == "translatingflag") {
+    sendResponse(translatingflag);
   }
 });
 
@@ -31,10 +24,12 @@ function change_settings(request) {
   deeplpro_apikey = request.deeplpro_apikey;
   target = request.target;
   translang = request.translang;
-  autoTranslationFlag = request.autoTranslationFlag;
+  anywayFlag = request.anywayFlag;
+  rmLoadingFlag = request.rmLoadingFlag;
   addedCSS = request.addedCSS;
   minlength = request.minlength;
   maxlength = request.maxlength;
+  freeflag = request.freeflag;
   try {
     document.querySelector("#chatransAddedCSS").remove();
   } catch {}
@@ -50,59 +45,131 @@ function change_settings(request) {
   a.id = "chatransAddedCSS";
   a.textContent = addedCSS;
   document.head.appendChild(a);
+  if (!request.input) {
+    if (translatingflag) {
+      disconnectObserver();
+    } else {
+      addObserver();
+    }
+  }
 }
 
-function add_observer() {
+function disconnectObserver() {
   try {
     observer.disconnect();
+    translatingflag = false;
   } catch {}
+}
+
+function addObserver() {
+  disconnectObserver();
   observer = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
-      if (mutation.target.id == "message") {
-        if (autoTranslationFlag) {
-          detectLanguage(mutation.target); //消さないとAPI使用量が
-        }
-        mutation.target.addEventListener("contextmenu", function (e) {
-          e.preventDefault();
+      if (
+        mutation.target.id == "message" &&
+        !mutation.target.classList.contains("chatTranslator")
+      ) {
+        if (translatingflag) {
           detectLanguage(mutation.target);
-        });
+        }
       }
     });
   });
+  let chatsClass = document.querySelector(
+    "#items.yt-live-chat-item-list-renderer"
+  );
   observer.observe(chatsClass, {
     childList: true,
     subtree: true,
   });
+  translatingflag = true;
 }
 
 function detectLanguage(targetelm) {
-  let chat = targetelm.textContent;
-  if (
-    (chat.length >= minlength || minlength == "") &&
-    (chat.length <= maxlength || maxlength == "")
-  ) {
-    chrome.i18n.detectLanguage(chat, function (result) {
-      var outputLang = result.languages[0].language;
-      console.log(result.languages);
-      api_translation(targetelm, outputLang);
-    });
+  if (!anywayFlag) {
+    let chat = targetelm.textContent;
+    if (
+      (chat.length >= minlength || minlength == "") &&
+      (chat.length <= maxlength || maxlength == "")
+    ) {
+      chrome.i18n.detectLanguage(chat, function (result) {
+        var outputLang = result.languages[0].language;
+        api_translation(targetelm, outputLang);
+      });
+    }
   } else {
+    api_translation(targetelm, "");
   }
+}
+
+function updateBadgeText(freeflag) {
+  let url;
+  if (freeflag == "Free") {
+    url = "https://api-free.deepl.com/v2/usage";
+  } else {
+    url = "https://api.deepl.com/v2/usage";
+  }
+  let params = {
+    auth_key: deeplpro_apikey,
+  };
+  let data = new URLSearchParams();
+  Object.keys(params).forEach((key) => data.append(key, params[key]));
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded; utf-8",
+    },
+    body: data,
+  }).then((res) => {
+    res.json().then((resData) => {
+      let percent = Math.trunc(
+        (resData.character_count / resData.character_limit) * 100
+      );
+      console.log(
+        "Chat Translator for DeepL: " +
+          resData.character_count +
+          "/" +
+          resData.character_limit +
+          " characters translated.\n"
+      );
+      chrome.runtime.sendMessage(
+        { message: "updateBadgeText", text: percent },
+        function (res) {
+          if (chrome.runtime.lastError) {
+          }
+        }
+      );
+    });
+  });
 }
 
 function api_translation(elm, outputLang) {
   chrome.storage.sync.get(null, function (items) {
-    if (items.translang.includes(outputLang)) {
+    if (items.anywayFlag || items.translang.includes(outputLang)) {
+      let loadingicon;
+      if (!rmLoadingFlag) {
+        loadingicon = document.createElement("img");
+        loadingicon.setAttribute("class", "loadingicon");
+        loadingicon.setAttribute("src", imgurl);
+        elm.before(loadingicon);
+        elm.classList.add("chatTranslator");
+      }
       var target_chat = elm.textContent;
       var target = items.target;
+      let freeflag = items.freeflag;
       if (typeof target === "undefined") {
         target = "JA";
       }
-      var api_url = "https://api.deepl.com/v2/translate";
+      let api_url = "";
+      if (freeflag == "Free") {
+        api_url = "https://api-free.deepl.com/v2/translate";
+      } else {
+        api_url = "https://api.deepl.com/v2/translate";
+      }
       var params = {
         auth_key: deeplpro_apikey,
         text: target_chat,
-        target: target,
+        target_lang: target,
       };
       var data = new URLSearchParams();
       Object.keys(params).forEach((key) => data.append(key, params[key]));
@@ -114,77 +181,83 @@ function api_translation(elm, outputLang) {
         },
         body: data,
       }).then((res) => {
+        if (!rmLoadingFlag) {
+          try {
+            loadingicon.remove();
+          } catch {}
+        }
         if (res.status == "200") {
           res.json().then((resData) => {
             elm.textContent = resData.translations[0].text;
+            console.log(
+              "Original : " +
+                "(" +
+                outputLang +
+                ") " +
+                target_chat +
+                "\nTranslation result from DeepL API : " +
+                resData.translations[0].text
+            );
           });
-          console.log(
-            "Original : " +
-              comment +
-              "\nTranslation from DeepL Pro API : " +
-              resData.translations[0].text
-          );
+          updateBadgeText(freeflag);
         } else {
           elm.textContent =
-            "This is a sample translation of YouTube™ Chat Translator for DeepL";
+            "Translation failed. Check the Developer Tools for more information. ";
 
           switch (res.status) {
             case 400:
               console.log(
-                "YouTube™ Chat Translator for DeepL Error : " +
+                "Chat Translator for DeepL Error : " +
                   res.status +
                   "\nBad request. Please check error message and your parameters."
               );
               break;
             case 403:
               console.log(
-                "YouTube™ Chat Translator for DeepL Error : " +
+                "Chat Translator for DeepL Error : " +
                   res.status +
                   "\nAuthorization failed. Please supply a valid auth_key parameter."
               );
               break;
             case 404:
               console.log(
-                "YouTube™ Chat Translator for DeepL Error : " +
+                "Chat Translator for DeepL Error : " +
                   res.status +
                   "\nThe requested resource could not be found."
               );
               break;
             case 413:
               console.log(
-                "YouTube™ Chat Translator for DeepL Error : " +
+                "Chat Translator for DeepL Error : " +
                   res.status +
                   "\nThe request size exceeds the limit."
               );
               break;
             case 429:
               console.log(
-                "YouTube™ Chat Translator for DeepL Error : " +
+                "Chat Translator for DeepL Error : " +
                   res.status +
                   "\nToo many requests. Please wait and resend your request."
               );
               break;
             case 456:
               console.log(
-                "YouTube™ Chat Translator for DeepL Error : " +
+                "Chat Translator for DeepL Error : " +
                   res.status +
                   "\nQuota exceeded. The character limit has been reached."
               );
               break;
             case 503:
               console.log(
-                "YouTube™ Chat Translator for DeepL Error : " +
+                "Chat Translator for DeepL Error : " +
                   res.status +
                   "\nResource currently unavailable. Try again later."
               );
               break;
             default:
-              console.log(
-                "YouTube™ Chat Translator for DeepL Error : " + res.status
-              );
+              console.log("Chat Translator for DeepL Error : " + res.status);
           }
         }
-        window.getSelection().removeAllRanges();
       });
     }
   });

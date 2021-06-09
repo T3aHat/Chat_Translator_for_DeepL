@@ -22,6 +22,7 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 1rem;
 }
 .autoflag {
   display: flex;
@@ -31,6 +32,7 @@ button {
 #addedCSS {
   resize: none;
   max-width: 100%;
+  margin-bottom: 5px;
 }
 #minlength,
 #maxlength {
@@ -47,4 +49,41 @@ button {
 }
 #addedCSStext {
   margin-bottom: 0;
+}
+#apitestm {
+  text-align: center;
+}
+#message {
+  text-align: center;
+}
+#close {
+  font-size: 100%;
+  font-weight: 1000;
+  border: 1px solid #999;
+  color: #999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border-radius: 100%;
+  width: 1.3em;
+  line-height: 1.3em;
+  cursor: pointer;
+  transition: 0.2s;
+  position: relative;
+  float: right;
+}
+
+#close:hover {
+  background: #333;
+  border-color: #333;
+  color: white;
+}
+#title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 10px;
 }
