@@ -1,4 +1,4 @@
-# YouTube™ Chat Translator for DeepL
+# Chat Translator for DeepL
 
 [How to use (YouTube) ](https://www.youtube.com/watch?v=8nhYxoAYdio)
 

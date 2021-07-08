@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Chat Translator for DeepL",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "permissions": ["storage","identity","identity.email"],
   "description": "Translate YouTube comments by DeepL API",
   "icons": { "128": "icon128.png" },
@@ -14,7 +14,7 @@
     "scripts": ["background.js"]
   },
   "browser_action": {
-    "default_popup": "options.html",
+    "default_popup": "popup.html",
     "run_at": "document_start"
   },
   "content_scripts": [

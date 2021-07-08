@@ -114,6 +114,17 @@ function save_options(input) {
                   if (chrome.runtime.lastError) {
                   }
                   if (!input) {
+                    if (translating) {
+                      //stop translation
+                      chrome.browserAction.setIcon({
+                        path: "icon128_grey.png",
+                      });
+                    } else {
+                      //start translation
+                      chrome.browserAction.setIcon({
+                        path: "icon128.png",
+                      });
+                    }
                     document.querySelector("#message").textContent = "Saved!";
                     setTimeout(function () {
                       window.close();
@@ -129,83 +140,100 @@ function save_options(input) {
   });
 }
 
+let translating = false;
 function restore_options() {
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    chrome.storage.sync.get(
+    chrome.tabs.sendMessage(
+      tabs[0].id,
       {
-        target: "JA",
-        deeplpro_apikey: "",
-        translang: ["en"],
-        anywayFlag: false,
-        rmLoadingFlag: false,
-        rmAuthorPhotoFlag: false,
-        rmAuthorNameFlag: false,
-        addedCSS: "",
-        minlength: 1,
-        maxlength: -1,
-        freeflag: "Free",
+        message: "translatingflag",
       },
-      function (items) {
-        chrome.identity.getProfileUserInfo(null, function (info) {
-          if (info.id == "" || info.email == "") {
-            document.querySelector("#apitestm").style.color = "red";
-            document.querySelector("#apitestm").innerText =
-              "To use this extension, please sign in to chrome and sync turns on.";
-          } else {
-            var tmp = 0;
-            var tmp2 = 1;
-            if (info.id.length < info.email.length) {
-              var len = info.id.length;
-            } else {
-              var len = info.email.length;
-            }
-            for (let i = 0; i < len; i++) {
-              tmp += info.id.charCodeAt(i) * info.email.charCodeAt(len - i - 1);
-              tmp2 *=
-                info.id.charCodeAt(i) * info.email.charCodeAt(len - i - 1);
-            }
-            var foo = [];
-            for (
-              let i = Math.round(String(tmp2).length / 2);
-              i < String(tmp2).length;
-              i++
-            ) {
-              foo.push(
-                String(tmp2).charCodeAt(i) *
-                  String(tmp2).charCodeAt(
-                    i - Math.round(String(tmp2).length / 2)
-                  )
-              );
-            }
-            var gtlen = 0;
-            if (items.deeplpro_apikey.length < foo.length) {
-              gtlen = items.deeplpro_apikey.length;
-            } else {
-              gtlen = foo.length;
-            }
-            var tmp3 = "";
-            for (let i = 0; i < items.deeplpro_apikey.length; i++) {
-              tmp3 += String.fromCharCode(
-                (items.deeplpro_apikey[i] - foo[i % gtlen]) / tmp
-              );
-            }
-            $("#translang").multipleSelect("setSelects", items.translang);
-            document.querySelector("#target").value = items.target;
-            document.querySelector("#deeplpro_apikey").value = tmp3;
-            document.querySelector("#anywayFlag").checked = items.anywayFlag;
-            document.querySelector("#rmLoadingFlag").checked =
-              items.rmLoadingFlag;
-            document.querySelector("#rmAuthorPhotoFlag").checked =
-              items.rmAuthorPhotoFlag;
-            document.querySelector("#rmAuthorNameFlag").checked =
-              items.rmAuthorNameFlag;
-            document.querySelector("#addedCSS").value = items.addedCSS;
-            document.querySelector("#minlength").value = items.minlength;
-            document.querySelector("#maxlength").value = items.maxlength;
-            document.querySelector("#freeflag").value = items.freeflag;
-            save_options(true);
+      function (res_translatingflag) {
+        if (chrome.runtime.lastError) {
+        }
+        translating = res_translatingflag;
+        if (res_translatingflag) {
+          document.querySelector("#save").textContent = "Stop";
+        }
+        chrome.storage.sync.get(
+          {
+            target: "JA",
+            deeplpro_apikey: "",
+            translang: ["en"],
+            anywayFlag: false,
+            rmLoadingFlag: false,
+            rmAuthorPhotoFlag: false,
+            rmAuthorNameFlag: false,
+            addedCSS: "",
+            minlength: 1,
+            maxlength: -1,
+            freeflag: "Free",
+          },
+          function (items) {
+            chrome.identity.getProfileUserInfo(null, function (info) {
+              if (info.id == "" || info.email == "") {
+                document.querySelector("#apitestm").style.color = "red";
+                document.querySelector("#apitestm").innerText =
+                  "To use this extension, please sign in to chrome and sync turns on.";
+              } else {
+                var tmp = 0;
+                var tmp2 = 1;
+                if (info.id.length < info.email.length) {
+                  var len = info.id.length;
+                } else {
+                  var len = info.email.length;
+                }
+                for (let i = 0; i < len; i++) {
+                  tmp +=
+                    info.id.charCodeAt(i) * info.email.charCodeAt(len - i - 1);
+                  tmp2 *=
+                    info.id.charCodeAt(i) * info.email.charCodeAt(len - i - 1);
+                }
+                var foo = [];
+                for (
+                  let i = Math.round(String(tmp2).length / 2);
+                  i < String(tmp2).length;
+                  i++
+                ) {
+                  foo.push(
+                    String(tmp2).charCodeAt(i) *
+                      String(tmp2).charCodeAt(
+                        i - Math.round(String(tmp2).length / 2)
+                      )
+                  );
+                }
+                var gtlen = 0;
+                if (items.deeplpro_apikey.length < foo.length) {
+                  gtlen = items.deeplpro_apikey.length;
+                } else {
+                  gtlen = foo.length;
+                }
+                var tmp3 = "";
+                for (let i = 0; i < items.deeplpro_apikey.length; i++) {
+                  tmp3 += String.fromCharCode(
+                    (items.deeplpro_apikey[i] - foo[i % gtlen]) / tmp
+                  );
+                }
+                $("#translang").multipleSelect("setSelects", items.translang);
+                document.querySelector("#target").value = items.target;
+                document.querySelector("#deeplpro_apikey").value = tmp3;
+                document.querySelector("#anywayFlag").checked =
+                  items.anywayFlag;
+                document.querySelector("#rmLoadingFlag").checked =
+                  items.rmLoadingFlag;
+                document.querySelector("#rmAuthorPhotoFlag").checked =
+                  items.rmAuthorPhotoFlag;
+                document.querySelector("#rmAuthorNameFlag").checked =
+                  items.rmAuthorNameFlag;
+                document.querySelector("#addedCSS").value = items.addedCSS;
+                document.querySelector("#minlength").value = items.minlength;
+                document.querySelector("#maxlength").value = items.maxlength;
+                document.querySelector("#freeflag").value = items.freeflag;
+                save_options(true);
+              }
+            });
           }
-        });
+        );
       }
     );
   });

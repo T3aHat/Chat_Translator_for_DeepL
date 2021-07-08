@@ -13,10 +13,23 @@ const imgurl = chrome.runtime.getURL("loading.gif");
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.message == "saved") {
-    sendResponse();
     change_settings(request);
+    chrome.runtime.sendMessage(
+      { message: "translatingTabId", translatingflag: translatingflag },
+      function (res) {
+        if (chrome.runtime.lastError) {
+        }
+      }
+    );
+    sendResponse();
   } else if (request.message == "translatingflag") {
     sendResponse(translatingflag);
+  } else if (request.message == "stopTranslation") {
+    disconnectObserver();
+    sendResponse();
+  } else if (request.message == "resumeTranslation") {
+    addObserver();
+    sendResponse();
   }
 });
 
@@ -154,7 +167,8 @@ function api_translation(elm, outputLang) {
         elm.before(loadingicon);
         elm.classList.add("chatTranslator");
       }
-      var target_chat = elm.textContent;
+      //var target_chat = elm.textContent;
+      let target_chat = elm.innerHTML;
       var target = items.target;
       let freeflag = items.freeflag;
       if (typeof target === "undefined") {
@@ -170,6 +184,7 @@ function api_translation(elm, outputLang) {
         auth_key: deeplpro_apikey,
         text: target_chat,
         target_lang: target,
+        tag_handling: "xml",
       };
       var data = new URLSearchParams();
       Object.keys(params).forEach((key) => data.append(key, params[key]));
@@ -188,7 +203,8 @@ function api_translation(elm, outputLang) {
         }
         if (res.status == "200") {
           res.json().then((resData) => {
-            elm.textContent = resData.translations[0].text;
+            //elm.textContent = resData.translations[0].text;
+            elm.innerHTML = resData.translations[0].text;
             console.log(
               "Original : " +
                 "(" +
