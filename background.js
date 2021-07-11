@@ -6,6 +6,7 @@ chrome.runtime.onInstalled.addListener(function (details) {
       deeplpro_apikey: [],
       translang: ["en"],
       anywayFlag: false,
+      strictFlag: true,
       rmLoadingFlag: false,
       rmAuthorPhotoFlag: false,
       rmAuthorNameFlag: false,
@@ -34,36 +35,38 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   }
 });
 chrome.tabs.onActivated.addListener((activeInfo) => {
-  if (translatingTabId != -1) {
-    if (activeInfo.tabId != translatingTabId) {
-      chrome.tabs.sendMessage(
-        translatingTabId,
-        {
-          message: "stopTranslation",
-        },
-        function (res) {
-          if (chrome.runtime.lastError) {
+  chrome.storage.sync.get(null, function (items) {
+    if (items.strictFlag && translatingTabId != -1) {
+      if (activeInfo.tabId != translatingTabId) {
+        chrome.tabs.sendMessage(
+          translatingTabId,
+          {
+            message: "stopTranslation",
+          },
+          function (res) {
+            if (chrome.runtime.lastError) {
+            }
+            chrome.browserAction.setIcon({
+              path: "icon128_grey.png",
+            });
           }
-          chrome.browserAction.setIcon({
-            path: "icon128_grey.png",
-          });
-        }
-      );
-    } else {
-      //resume translation
-      chrome.tabs.sendMessage(
-        activeInfo.tabId,
-        {
-          message: "resumeTranslation",
-        },
-        function (res) {
-          if (chrome.runtime.lastError) {
+        );
+      } else {
+        //resume translation
+        chrome.tabs.sendMessage(
+          activeInfo.tabId,
+          {
+            message: "resumeTranslation",
+          },
+          function (res) {
+            if (chrome.runtime.lastError) {
+            }
+            chrome.browserAction.setIcon({
+              path: "icon128.png",
+            });
           }
-          chrome.browserAction.setIcon({
-            path: "icon128.png",
-          });
-        }
-      );
+        );
+      }
     }
-  }
+  });
 });

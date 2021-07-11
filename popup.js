@@ -76,6 +76,7 @@ function save_options(input) {
           deeplpro_apikey: tmplist,
           translang: $("#translang").multipleSelect("getSelects"),
           anywayFlag: document.querySelector("#anywayFlag").checked,
+          strictFlag: document.querySelector("#strictFlag").checked,
           rmLoadingFlag: document.querySelector("#rmLoadingFlag").checked,
           rmAuthorPhotoFlag:
             document.querySelector("#rmAuthorPhotoFlag").checked,
@@ -99,6 +100,7 @@ function save_options(input) {
                     document.querySelector("#deeplpro_apikey").value,
                   translang: $("#translang").multipleSelect("getSelects"),
                   anywayFlag: document.querySelector("#anywayFlag").checked,
+                  strictFlag: document.querySelector("#strictFlag").checked,
                   rmLoadingFlag:
                     document.querySelector("#rmLoadingFlag").checked,
                   rmAuthorPhotoFlag:
@@ -161,6 +163,7 @@ function restore_options() {
             deeplpro_apikey: "",
             translang: ["en"],
             anywayFlag: false,
+            strictFlag: true,
             rmLoadingFlag: false,
             rmAuthorPhotoFlag: false,
             rmAuthorNameFlag: false,
@@ -219,6 +222,8 @@ function restore_options() {
                 document.querySelector("#deeplpro_apikey").value = tmp3;
                 document.querySelector("#anywayFlag").checked =
                   items.anywayFlag;
+                document.querySelector("#strictFlag").checked =
+                  items.strictFlag;
                 document.querySelector("#rmLoadingFlag").checked =
                   items.rmLoadingFlag;
                 document.querySelector("#rmAuthorPhotoFlag").checked =

@@ -56,6 +56,12 @@ Chats in the language you select here will be translated.
 - When selected, all text within the chat field will be translated even if the language of the text is mother tongue.
 - When not selected, only text in the selected language on `Translate from` will be translated.
 
+## Strict mode
+
+- Default: `true`
+- When the active tab is changed, the translation will be paused.
+- When you come back to the tab, the translation will be resumed.
+
 ## Remove loading icon
 
 - Default: `false`
