@@ -22,12 +22,6 @@ To use this extension, please sign in to Chrome and sync turns on. If you do not
 `Error in response to storage.get: Error: Invocation of form identity.getProfileUserInfo(null, function) doesn't match definition identity.getProfileUserInfo(function callback)`.  
 ![syncon.png](https://github.com/T3aHat/Chat_Translator_for_DeepL/raw/main/images/syncon.png)
 
-# How to translate
-
-Since there is no need to translate native language comments into the native language,
-[`chrome.i18n.detectLanguage()`](https://developer.chrome.com/docs/extensions/reference/i18n/#method-detectLanguage) will first determine the language, and if the language is selected in `Translate into`, it will be translated using the DeepL API.
-However, this language detection system is not as accurate as DeepL and some text languages, such as Arabic, which are not supported by DeepL, are detected, but in this case, the text is not translated.
-
 # Usage
 
 - Click on the icon in the upper right corner of YoutubeLive or its archive to open a pop-up window and press the `start` button to start translation.
@@ -62,10 +56,10 @@ Chats in the language you select here will be translated.
 - When the active tab is changed, the translation will be paused.
 - When you come back to the tab, the translation will be resumed.
 
-## Remove loading icon
+## Remove translating icon
 
 - Default: `false`
-- When selected, the loading icon ![loading.gif](https://github.com/T3aHat/Chat_Translator_for_DeepL/raw/main/loading.gif) won't be appeared.
+- When selected, the translating icon ![loading.gif](https://github.com/T3aHat/Chat_Translator_for_DeepL/raw/main/loading.gif) won't be appeared.
 
 ## Remove author-photo, author-name
 
@@ -85,6 +79,12 @@ Chats in the language you select here will be translated.
 - Default: `Free`
 - Select your API_KEY's version `Free` or `Pro`
 - Input your [DeepL](https://www.deepl.com/pro#developer) API_KEY here.
+
+# How to translate
+
+Since there is no need to translate native language comments into the native language,
+[`chrome.i18n.detectLanguage()`](https://developer.chrome.com/docs/extensions/reference/i18n/#method-detectLanguage) will first determine the language, and if the language is selected in `Translate into`, it will be translated using the DeepL API.
+However, this language detection system is not as accurate as DeepL and some text languages, such as Arabic, which are not supported by DeepL, are detected, but in this case, the text is not translated.
 
 # 免責事項(Disclaimer)
 
