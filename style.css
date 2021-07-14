@@ -13,7 +13,7 @@ button {
 }
 
 label {
-  display: flex;
+  display: inline;
   align-items: center;
 }
 
@@ -36,7 +36,7 @@ label {
   align-items: center;
 }
 #addedCSS {
-  resize: none;
+  resize: vertical;
   max-width: 100%;
   margin-bottom: 5px;
 }
@@ -45,10 +45,7 @@ label {
   width: 60px;
   height: 1rem;
 }
-#deeplpro_apikey,
-#apitest {
-  height: 1rem;
-}
+
 .ms-choice,
 #target {
   height: 1rem;
@@ -92,4 +89,7 @@ label {
   font-size: 1rem;
   font-weight: 600;
   margin-bottom: 10px;
+}
+.ms-choice span {
+  top: -4px;
 }

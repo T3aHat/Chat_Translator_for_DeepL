@@ -70,3 +70,11 @@ chrome.tabs.onActivated.addListener((activeInfo) => {
     }
   });
 });
+chrome.tabs.onUpdated.addListener(function (tabId, Info, tab) {
+  console.log(Info.status, tabId, translatingTabId);
+  if (tabId == translatingTabId) {
+    chrome.browserAction.setIcon({
+      path: "icon128_grey.png",
+    });
+  }
+});
