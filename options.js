@@ -70,6 +70,17 @@ function save_options(input) {
           .querySelector(".ms-choice")
           .querySelector("span").style.display = "";
       }
+      let minlen, maxlen;
+      if (document.querySelector("#minlength").value < 1) {
+        minlen = "";
+      } else {
+        minlen = document.querySelector("#minlength").value;
+      }
+      if (document.querySelector("#maxlength").value < 1) {
+        maxlen = "";
+      } else {
+        maxlen = document.querySelector("#maxlength").value;
+      }
       chrome.storage.sync.set(
         {
           target: document.querySelector("#target").value,
@@ -82,8 +93,8 @@ function save_options(input) {
             document.querySelector("#rmAuthorPhotoFlag").checked,
           rmAuthorNameFlag: document.querySelector("#rmAuthorNameFlag").checked,
           addedCSS: document.querySelector("#addedCSS").value,
-          minlength: document.querySelector("#minlength").value,
-          maxlength: document.querySelector("#maxlength").value,
+          minlength: minlen,
+          maxlength: maxlen,
           freeflag: document.querySelector("#freeflag").value,
         },
         function () {
@@ -108,8 +119,8 @@ function save_options(input) {
                   rmAuthorNameFlag:
                     document.querySelector("#rmAuthorNameFlag").checked,
                   addedCSS: document.querySelector("#addedCSS").value,
-                  minlength: document.querySelector("#minlength").value,
-                  maxlength: document.querySelector("#maxlength").value,
+                  minlength: minlen,
+                  maxlength: maxlen,
                   freeflag: document.querySelector("#freeflag").value,
                 },
                 function (res) {
@@ -145,7 +156,7 @@ function restore_options() {
         rmAuthorNameFlag: false,
         addedCSS: "",
         minlength: 1,
-        maxlength: -1,
+        maxlength: "",
         freeflag: "Free",
       },
       function (items) {
