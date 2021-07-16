@@ -1,3 +1,4 @@
+import os
 import zipfile
 with zipfile.ZipFile('Chat_Translator_for_DeepL.zip', 'w')as zf:
     zf.write('manifest.json')
@@ -15,6 +16,7 @@ with zipfile.ZipFile('Chat_Translator_for_DeepL.zip', 'w')as zf:
     zf.write('multiple-select.min.css')
     zf.write('icon24.png')
     zf.write('icon128.png')
+    zf.write('icon128_grey.png')
     zf.write('loading.gif')
     for folder, subfolders, files in os.walk('_locales'):
         zf.write(folder)
