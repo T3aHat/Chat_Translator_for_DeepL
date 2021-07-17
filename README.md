@@ -24,7 +24,7 @@ To use this extension, please sign in to Chrome and sync turns on. If you do not
 
 # Usage
 
-- Click on the icon in the upper right corner of YoutubeLive or its archive to open a pop-up window and press the `start` button to start translation.
+- Click on the icon in the upper right corner of Youtube Live or its archive to open a pop-up window and press the `start` button to start translation.
 - Open the pop-up window again and press the `stop` button to finish translation.
 
 # Options
