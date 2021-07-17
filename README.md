@@ -44,7 +44,7 @@ Chats in the language you select here will be translated.
 - Only text of the length specified here will be translated.
 - This setting prevents excessive use of the API by spam with long texts.
 
-## Translate anyway
+## Translate all chats
 
 - Default: `false`
 - When selected, all text within the chat field will be translated even if the language of the text is mother tongue.
