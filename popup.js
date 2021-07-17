@@ -127,16 +127,19 @@ function save_options(input) {
                   if (chrome.runtime.lastError) {
                   }
                   if (!input) {
-                    if (translating) {
-                      //stop translation
-                      chrome.browserAction.setIcon({
-                        path: "icon128_grey.png",
-                      });
-                    } else {
-                      //start translation
-                      chrome.browserAction.setIcon({
-                        path: "icon128.png",
-                      });
+                    if (res) {
+                      //if tabs[0] is live_chat*, otherwise undefined
+                      if (translating) {
+                        //stop translation
+                        chrome.browserAction.setIcon({
+                          path: "icon128_grey.png",
+                        });
+                      } else {
+                        //start translation
+                        chrome.browserAction.setIcon({
+                          path: "icon128.png",
+                        });
+                      }
                     }
                     document.querySelector("#message").textContent = "Saved!";
                     setTimeout(function () {

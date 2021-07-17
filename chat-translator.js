@@ -21,7 +21,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         }
       }
     );
-    sendResponse();
+    sendResponse(true);
   } else if (request.message == "translatingflag") {
     sendResponse(translatingflag);
   } else if (request.message == "stopTranslation") {
