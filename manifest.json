@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Chat Translator for DeepL",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "permissions": [
     "storage",
     "identity",

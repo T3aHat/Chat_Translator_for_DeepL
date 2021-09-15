@@ -1,6 +1,9 @@
 chrome.runtime.onInstalled.addListener(function (details) {
   chrome.browserAction.setIcon({ path: "icon128_grey.png" });
   if (details.reason == "install") {
+    chrome.storage.local.set({
+      addedCSS: "",
+    });
     chrome.storage.sync.set({
       target: "JA",
       deeplpro_apikey: [],
