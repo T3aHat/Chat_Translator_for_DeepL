@@ -10,6 +10,7 @@ chrome.runtime.onInstalled.addListener(function (details) {
       rmLoadingFlag: false,
       rmAuthorPhotoFlag: false,
       rmAuthorNameFlag: false,
+      addedCSSFlag: true,
       addedCSS: "",
       minlength: 1,
       maxlength: "",

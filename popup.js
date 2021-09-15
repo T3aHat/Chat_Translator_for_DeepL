@@ -81,6 +81,13 @@ function save_options(input) {
       } else {
         maxlen = document.querySelector("#maxlength").value;
       }
+      //CSS data is saved on local storage
+      chrome.storage.local.set(
+        {
+          addedCSS: document.querySelector("#addedCSS").value,
+        },
+        function () {}
+      );
       chrome.storage.sync.set(
         {
           target: document.querySelector("#target").value,
@@ -92,9 +99,9 @@ function save_options(input) {
           rmAuthorPhotoFlag:
             document.querySelector("#rmAuthorPhotoFlag").checked,
           rmAuthorNameFlag: document.querySelector("#rmAuthorNameFlag").checked,
-          addedCSS: document.querySelector("#addedCSS").value,
           minlength: minlen,
           maxlength: maxlen,
+          addedCSSFlag: document.querySelector("#addedCSSFlag").checked,
           freeflag: document.querySelector("#freeflag").value,
         },
         function () {
@@ -121,6 +128,7 @@ function save_options(input) {
                   addedCSS: document.querySelector("#addedCSS").value,
                   minlength: minlen,
                   maxlength: maxlen,
+                  addedCSSFlag: document.querySelector("#addedCSSFlag").checked,
                   freeflag: document.querySelector("#freeflag").value,
                 },
                 function (res) {
@@ -171,6 +179,15 @@ function restore_options() {
         if (res_translatingflag) {
           document.querySelector("#save").textContent = "Stop";
         }
+        // CSS data is saved on  local storage
+        chrome.storage.local.get(
+          {
+            addedCSS: "",
+          },
+          function (localItems) {
+            document.querySelector("#addedCSS").value = localItems.addedCSS;
+          }
+        );
         chrome.storage.sync.get(
           {
             target: "JA",
@@ -181,9 +198,9 @@ function restore_options() {
             rmLoadingFlag: false,
             rmAuthorPhotoFlag: false,
             rmAuthorNameFlag: false,
-            addedCSS: "",
             minlength: 1,
             maxlength: "",
+            addedCSSFlag: true,
             freeflag: "Free",
           },
           function (items) {
@@ -244,9 +261,10 @@ function restore_options() {
                   items.rmAuthorPhotoFlag;
                 document.querySelector("#rmAuthorNameFlag").checked =
                   items.rmAuthorNameFlag;
-                document.querySelector("#addedCSS").value = items.addedCSS;
                 document.querySelector("#minlength").value = items.minlength;
                 document.querySelector("#maxlength").value = items.maxlength;
+                document.querySelector("#addedCSSFlag").checked =
+                  items.addedCSSFlag;
                 document.querySelector("#freeflag").value = items.freeflag;
                 save_options(true);
               }

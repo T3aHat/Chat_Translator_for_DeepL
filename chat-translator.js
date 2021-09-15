@@ -53,11 +53,17 @@ function change_settings(request) {
   if (request.rmAuthorNameFlag) {
     addedCSS += "\n#author-name.yt-live-chat-author-chip{display:none;}";
   }
-  a = document.createElement("style");
-  a.type = "text/css";
-  a.id = "chatransAddedCSS";
-  a.textContent = addedCSS;
-  document.head.appendChild(a);
+  if (request.addedCSSFlag) {
+    a = document.createElement("style");
+    a.type = "text/css";
+    a.id = "chatransAddedCSS";
+    a.textContent = addedCSS;
+    document.head.appendChild(a);
+  } else {
+    try {
+      document.querySelector("#chatransAddedCSS").remove;
+    } catch {}
+  }
   if (!request.input) {
     if (translatingflag) {
       disconnectObserver();

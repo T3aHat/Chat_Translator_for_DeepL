@@ -38,7 +38,9 @@ label {
 #addedCSS {
   resize: vertical;
   max-width: 100%;
+  margin-top: 3px;
   margin-bottom: 5px;
+  margin-left: 1.25rem;
 }
 #minlength,
 #maxlength {
@@ -49,9 +51,6 @@ label {
 .ms-choice,
 #target {
   height: 1rem;
-}
-#addedCSStext {
-  margin-bottom: 0;
 }
 #apitestm {
   text-align: center;

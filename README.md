@@ -4,7 +4,7 @@
 
 # Install from Chrome Web Store
 
-https://chrome.google.com/webstore/detail/chat-translator-for-deepl/fbmkdedikbcbkkeaofpenfncppepfnlo
+<a href="https://chrome.google.com/webstore/detail/chat-translator-for-deepl/fbmkdedikbcbkkeaofpenfncppepfnlo" target="_blank" rel="noopener noreferrer"><img src="https://storage.googleapis.com/chrome-gcs-uploader.appspot.com/image/WlD8wC6g8khYWPJUsQceQkhXSlv1/HRs9MPufa1J1h5glNhut.png" alt="ChromeWebStore" ></a>
 
 # Install from GitHub
 
@@ -33,7 +33,7 @@ To use this extension, please sign in to Chrome and sync turns on. If you do not
 
 ## Translate from
 
-Chats in the language you select here will be translated.
+- Chats in the language you select here will be translated.
 
 ## Translate into
 
@@ -67,12 +67,11 @@ Chats in the language you select here will be translated.
 
 - Default: `false`
 - When selected, hide the user icon or user name in the chat field.
-- i.e. `#author-photo.yt-live-chat-text-message-renderer{display:none;}` and `#author-name.yt-live-chat-author-chip{display:none;}`
+  - i.e. `#author-photo.yt-live-chat-text-message-renderer{display:none;}` and `#author-name.yt-live-chat-author-chip{display:none;}` are applied.
 
 ## Custom CSS
 
-- By writing CSS here, you can freely customize the display of the chat or comments field.
-- If the CSS code is very long, the chrome extension will not be able to save the CSS correctly due to `chrome.storage.sync`'s capacity issue. So, you need to solve this problem by applying CSS every time.
+- By writing CSS here, you can freely customize the display of the chat field.
 
 ## DeepL API KEY
 
